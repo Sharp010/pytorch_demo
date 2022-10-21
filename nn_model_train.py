@@ -24,24 +24,28 @@ optim = torch.optim.SGD(model.parameters(), lr=0.01)
 round = 10
 start_time = time.time()
 for i in range(round):
-    # 训练
+    # 训练模式
     print("第{}轮训练开始".format(i + 1))
     model.train()
     cnt = 0
     for data in train_dataLoader:
         imgs, targets = data
+        # 正向传播
         outputs = model(imgs)
+        # 计算损失函数值
         loss_val = loss(outputs, targets)
+        # 梯度清零
         optim.zero_grad()
+        # 反向传播
         loss_val.backward()
-        # 对{卷积核}中的参数进行优化
+        # 参数优化
         optim.step()
         cnt += 1
         if cnt % 100 == 0:
             end_time = time.time()
             print("训练时间:{}".format(end_time - start_time))
             print("第 {} 次训练loss: {}".format(cnt, loss_val))
-    # 测试
+    # 测试模式
     model.eval()
     with torch.no_grad():
         correct_cnt = 0
